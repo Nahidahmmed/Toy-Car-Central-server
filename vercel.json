@@ -12,8 +12,11 @@
             "dest": "/",
             "methods": [
                 "GET",
-                "POST",                
-                "DELETE"
+                "POST",
+                "PATCH",
+                "PUT",
+                "DELETE",
+                "OPTIONS"
             ]
         }
     ]
