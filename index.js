@@ -36,10 +36,10 @@ async function run() {
 
         const CarToyCollection = client.db('car').collection('carServices');
         const AddedToyCollection = client.db('AddedToyCar').collection('AddedToyCarServices');
-      
-  
 
-        app.get('/newcars', async(req,res) =>{
+
+
+        app.get('/newcars', async (req, res) => {
             const cursor = CarToyCollection.find();
             const result = await cursor.toArray();
             res.send(result);
@@ -47,21 +47,27 @@ async function run() {
 
 
         app.get('/addedToys', async (req, res) => {
-            console.log(req.query.sellerEmail);
             let query = {};
-            if(req.query?.sellerEmail){
-                query = {sellerEmail: req.query.sellerEmail}
+            if (req.query?.sellerEmail) {
+                query = { sellerEmail: req.query.sellerEmail }
             }
             const cursor = AddedToyCollection.find(query).limit(20);
             const result = await cursor.toArray();
             res.send(result);
         })
 
-        
+
         app.get('/addedToys/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id: new ObjectId(id)}
+            const query = { _id: new ObjectId(id) }
             const result = await AddedToyCollection.findOne(query);
+            res.send(result)
+        })
+
+        app.delete('/addedToys/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await AddedToyCollection.deleteOne(query);
             res.send(result)
         })
 
