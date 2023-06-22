@@ -19,7 +19,7 @@ app.use(express.json());
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ht72zna.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
+const  client = new MongoClient(uri, {
     serverApi: {
         version: ServerApiVersion.v1,
         strict: true,
@@ -30,20 +30,12 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-         client.connect();
+       
 
 
 
         const CarToyCollection = client.db('car').collection('carServices');
         const AddedToyCollection = client.db('AddedToyCar').collection('AddedToyCarServices');
-
-
-
-        app.get('/newcars', async (req, res) => {
-            const cursor = CarToyCollection.find();
-            const result = await cursor.toArray();
-            res.send(result);
-        })
 
 
         app.get('/addedToys', async (req, res) => {
@@ -55,14 +47,23 @@ async function run() {
             const result = await cursor.toArray();
             res.send(result);
         })
-
-
+        app.get('/newcars', async (req, res) => {
+            const cursor = CarToyCollection.find();
+            const result = await cursor.toArray();
+            res.send(result);
+        })
         app.get('/addedToys/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) }
             const result = await AddedToyCollection.findOne(query);
             res.send(result)
         })
+
+
+       
+
+
+        
 
         app.delete('/addedToys/:id', async (req, res) => {
             const id = req.params.id;
@@ -90,7 +91,7 @@ async function run() {
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
-        await client.close();
+        // await client.close();
     }
 }
 run().catch(console.dir);
